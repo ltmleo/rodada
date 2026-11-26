@@ -36,33 +36,25 @@ export function initExtras({ say, track }){
     }
   }
 
-  /* ---- sugestões (formulário sem login) ---- */
-  const endpoint = (CONFIG.feedback?.endpoint || '').trim();
-  const fb = $('fbDlg');
-  if (endpoint && /^https:\/\//.test(endpoint)){
-    $('fbBtn').hidden = false;
-    const open = (preset = {}) => {
-      $('fbForm').reset(); $('fbMsg').textContent = '';
-      if (preset.tipo) $('fbTipo').value = preset.tipo;
-      if (preset.exemplo) $('fbExemplo').value = preset.exemplo.slice(0, 1500);
-      toggleFields(); fb.showModal(); track('feedback_open', { origem: preset.tipo ? 'colar' : 'rodape' });
-    };
-    const toggleFields = () => { $('fbJogoBox').hidden = $('fbTipo').value !== 'jogo'; };
-    $('fbTipo').addEventListener('change', toggleFields);
-    $('fbBtn').addEventListener('click', () => open());
-    $('fbClose').addEventListener('click', () => fb.close());
-    document.addEventListener('rodada:suggest', e => open({ tipo:'jogo', exemplo: e.detail?.text || '' }));
-    $('fbForm').addEventListener('submit', async ev => {
-      ev.preventDefault();
-      if ($('fbForm')._gotcha?.value) return fb.close();                 // honeypot: bots preenchem
-      const data = new FormData($('fbForm')); data.set('pagina', location.href);
-      $('fbSend').disabled = true; $('fbMsg').textContent = 'Enviando…';
-      try {
-        const r = await fetch(endpoint, { method:'POST', body:data, headers:{ Accept:'application/json' } });
-        if (!r.ok) throw new Error(r.status);
-        track('feedback_send', { tipo: data.get('tipo') }); fb.close(); say('Obrigado! Recebi sua sugestão.');
-      } catch(e){ $('fbMsg').textContent = 'Não consegui enviar agora. Tente de novo em instantes.'; }
-      $('fbSend').disabled = false;
+  /* ---- sugestões: abrem uma issue pública no GitHub (nada é enviado sem o usuário clicar em "Submit") ---- */
+  const issuesUrl = (CONFIG.feedback?.issuesUrl || '').trim();
+  const issue = (template, title, body = '') => {
+    const u = new URL(issuesUrl);
+    u.searchParams.set('template', template); u.searchParams.set('title', title);
+    if (body) u.searchParams.set('body', body.slice(0, 1500));
+    return u.href;
+  };
+  if (/^https:\/\//.test(issuesUrl)){
+    $('fbBtn').href = issue('sugestao-jogo.md', 'Sugestão: ');  $('fbBtn').hidden = false;
+    $('fbErro').href = issue('erro.md', 'Erro: ');              $('fbErro').hidden = false;
+    $('fbBtn').addEventListener('click', () => track('feedback_open', { tipo:'jogo', origem:'rodape' }));
+    $('fbErro').addEventListener('click', () => track('feedback_open', { tipo:'erro', origem:'rodape' }));
+    // texto não reconhecido: o usuário decide se envia; o texto vai para a issue, nunca para o analytics
+    const sg = $('suggestPaste');
+    document.addEventListener('rodada:suggest', e => {
+      const txt = e.detail?.text || '';
+      sg.href = issue('sugestao-jogo.md', 'Sugestão de jogo: ', 'Exemplo do texto de "Compartilhar":\n\n```\n' + txt.trim() + '\n```\n');
+      track('feedback_open', { tipo:'jogo', origem:'colar' });
     });
   }
 

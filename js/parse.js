@@ -10,6 +10,7 @@ export const DEFAULT_GAMES = [
   { id:'farflung',   name:'Farflung',   emoji:'🌍', url:'https://farflung.game', on:true },
   { id:'wordle',     name:'Wordle',     emoji:'🔤', url:'https://www.nytimes.com/games/wordle/index.html', on:true },
   { id:'conexo',     name:'Conexo',     emoji:'🔗', url:'https://conexo.ws',                               on:true },
+  { id:'disk-discovery', name:'Disk Discovery', emoji:'💿', url:'https://ltmleo.github.io/disk-discovery/', on:true },
   { id:'worldle',    name:'Worldle',    emoji:'🗺️', url:'https://worldle.teuteuf.fr',                      on:true },
 ];
 // Detecção do jogo pelo texto colado (ordem importa: mais específicos primeiro). Jogos sem regra caem no nome/domínio.

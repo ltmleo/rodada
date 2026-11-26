@@ -26,7 +26,7 @@ Sem build: HTML/CSS/JS puro. A configuração (Google Analytics, banner dos site
 Push em `main` roda os testes e publica no GitHub Pages (Settings › Pages › Source: **GitHub Actions**).
 
 ## Adicionar um jogo
-Abra uma sugestão pelo formulário do app, com um exemplo do texto de "Compartilhar". Para contribuir com código, veja "Adicionar um jogo" no `CLAUDE.md`.
+Abra uma [issue de sugestão](https://github.com/ltmleo/rodada/issues/new?template=sugestao-jogo.md) com um exemplo do texto de "Compartilhar". Para contribuir com código, veja "Adicionar um jogo" no `CLAUDE.md`.
 
 ## Privacidade
 Seus resultados nunca saem do aparelho. Veja [privacidade.html](privacidade.html).

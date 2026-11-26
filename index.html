@@ -42,7 +42,7 @@
     <div class="paste-head"><h2>Registrar resultado</h2><span class="hint">Toque em "Compartilhar" no jogo e cole aqui (um ou vários de uma vez).</span></div>
     <textarea id="paste" rows="3" placeholder="Cole aqui o resultado…" aria-label="Texto de compartilhar"></textarea>
     <div class="detect" id="detect" aria-live="polite"></div>
-    <button type="button" class="linkbtn" id="suggestPaste" hidden>Não reconhecido? Sugerir este jogo</button>
+    <a class="linkbtn" id="suggestPaste" href="#" target="_blank" rel="noopener" hidden>Não reconhecido? Sugerir este jogo</a>
     <div class="paste-actions">
       <button id="readclip" class="ghost sm">📋 Colar</button>
       <details class="opts" id="opts"><summary>Jogo e dia</summary>
@@ -112,7 +112,8 @@
   <section class="sites" id="sites" hidden></section>
 
   <footer class="foot">
-    <button class="linkbtn" id="fbBtn" hidden>💡 Sugerir jogo ou reportar erro</button>
+    <a id="fbBtn" href="#" target="_blank" rel="noopener" hidden>💡 Sugerir jogo</a>
+    <a id="fbErro" href="#" target="_blank" rel="noopener" hidden>🐞 Reportar erro</a>
     <a href="privacidade.html">Privacidade</a>
     <a href="https://ltmleo.github.io/#sites">Mais de @ltmleo</a>
     <span>Rodada · feito por <a href="https://github.com/ltmleo" target="_blank" rel="noopener">ltmleo</a></span>
@@ -127,28 +128,6 @@
     <div class="glist" id="glist"></div>
     <div class="row"><button type="button" id="addgame" class="sm">+ Adicionar jogo</button><button type="button" id="resetgames" class="ghost sm">Restaurar lista inicial</button>
       <span class="spacer"></span><button class="primary" value="close">Fechar</button></div>
-  </form>
-</dialog>
-<dialog id="fbDlg">
-  <form id="fbForm" method="dialog">
-    <h2>Sugestões e problemas</h2>
-    <div class="hint" style="margin:4px 0 10px">Sem login. Leio tudo, mas nem sempre consigo responder.</div>
-    <div class="glist">
-      <label class="hint" for="fbTipo">O que você quer enviar?</label>
-      <select id="fbTipo" name="tipo"><option value="jogo">Sugerir um jogo</option><option value="erro">Reportar um erro</option><option value="ideia">Ideia ou melhoria</option></select>
-      <div id="fbJogoBox" class="glist" style="margin:0">
-        <input type="text" name="jogo" placeholder="Nome do jogo" maxlength="80" aria-label="Nome do jogo">
-        <input type="url" name="link" placeholder="Link do jogo (https://…)" maxlength="300" aria-label="Link do jogo">
-        <label class="hint" for="fbExemplo">Cole um exemplo do texto de "Compartilhar" do jogo (ajuda muito!)</label>
-        <textarea id="fbExemplo" name="exemplo" rows="4" maxlength="1500"></textarea>
-      </div>
-      <label class="hint" for="fbMensagem">Mensagem</label>
-      <textarea id="fbMensagem" name="mensagem" rows="3" maxlength="2000" required></textarea>
-      <input type="text" name="contato" placeholder="Seu e-mail ou @ (opcional, só se quiser resposta)" maxlength="120" aria-label="Contato opcional">
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-    </div>
-    <div class="hint" id="fbMsg" role="status"></div>
-    <div class="row" style="margin-top:10px;justify-content:flex-end"><button type="button" id="fbClose" class="ghost">Cancelar</button><button class="primary" id="fbSend" type="submit">Enviar</button></div>
   </form>
 </dialog>
 

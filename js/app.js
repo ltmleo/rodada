@@ -24,6 +24,10 @@ let S = load();
   if (g){ g.id = 'flagle'; if (g.name === 'Flagly') g.name = 'Flagle'; if (!g.url) g.url = 'https://www.flagle.io/';
     for (const d in S.log) if (S.log[d].flagly){ S.log[d].flagle = S.log[d].flagly; delete S.log[d].flagly; } }
   const f = S.games.find(x => x.id === 'farflung'); if (f && !f.url) f.url = 'https://farflung.game';
+  if (!S.games.some(x => x.id === 'disk-discovery') && !S.migrations?.diskDiscovery){   // jogo novo entra uma vez para quem já usa
+    const dd = DEFAULT_GAMES.find(x => x.id === 'disk-discovery'); if (dd){ S.games.push({ ...dd }); }
+    (S.migrations ??= {}).diskDiscovery = true;
+  }
   const c = S.games.findIndex(x => x.id === 'connections');           // Connections (NYT) -> Conexo (pt); histórico antigo fica guardado
   if (c >= 0 && !S.games.some(x => x.id === 'conexo') && /nytimes\.com\/games\/connections/.test(S.games[c].url))
     S.games[c] = { id:'conexo', name:'Conexo', emoji:'🔗', url:'https://conexo.ws', on:S.games[c].on };
@@ -227,7 +231,7 @@ function onPasteChange(){
   if (t.trim() && !g) $('opts').open = true;
   $('suggestPaste').hidden = !(t.trim() && !g && !$('fbBtn').hidden);
 }
-$('suggestPaste').onclick = () => document.dispatchEvent(new CustomEvent('rodada:suggest', { detail:{ text: $('paste').value } }));
+$('suggestPaste').addEventListener('click', () => document.dispatchEvent(new CustomEvent('rodada:suggest', { detail:{ text: $('paste').value } })));
 $('paste').addEventListener('input', () => { $('gsel').value = ''; onPasteChange(); });
 $('readclip').onclick = async () => {
   try { $('paste').value = await navigator.clipboard.readText(); $('gsel').value = ''; onPasteChange(); say('Texto lido. Confira e clique em Registrar.'); }

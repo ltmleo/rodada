@@ -19,5 +19,7 @@ export const CONFIG = {
   // Formulário de sugestões/erros, sem login. Cole aqui o endereço do seu formulário Formspree
   // (https://formspree.io/f/XXXXXXXX) ou de outro serviço que aceite POST com Accept: application/json.
   // Vazio = o botão de sugestões não aparece.
-  feedback: { endpoint: '' },
+  // Sugestões e erros viram issues públicas do GitHub (sem formulário próprio, sem servidor).
+  // Vazio = os links de sugestão ficam ocultos.
+  feedback: { issuesUrl: 'https://github.com/ltmleo/rodada/issues/new' },
 };

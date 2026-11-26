@@ -40,4 +40,4 @@ privacidade.html      política
 
 ## Integração ao ecossistema
 Seguir a skill `ltm-novo-site` (repo `ltmleo/ltmleo.github.io`, pasta `.claude/skills/ltm-novo-site/`). Ela define o GA compartilhado `G-714QFE3V9G`, a barra `<ltm-bar>` e a lista `sites.json`. O site `rodada` já está previsto lá (`id: rodada`, `path: /rodada/`).
-Sugestões: o formulário ainda não tem endpoint (`feedback.endpoint` em `config.js`); a skill não cobre isso.
+Sugestões e erros: abrem issues públicas do GitHub (`feedback.issuesUrl` em `config.js`, templates em `.github/ISSUE_TEMPLATE/`). Sem formulário próprio nem servidor.
