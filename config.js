@@ -2,16 +2,17 @@
 // Tudo aqui é público (vai para o navegador de quem visita): nunca coloque segredos.
 export const CONFIG = {
   name: 'Rodada',
+  siteId: 'rodada',                       // = id em sites.json e content_group do GA e <ltm-bar site>
   url: 'https://ltmleo.github.io/rodada/',
 
   // Google Analytics 4. Enquanto estiver como G-XXXXXXXXXX (ou vazio), NADA é carregado nem enviado.
-  analytics: { measurementId: 'G-XXXXXXXXXX' },
+  analytics: { measurementId: 'G-714QFE3V9G' },   // propriedade única do ecossistema ltmleo.github.io (skill ltm-novo-site)
 
-  // Banner dos seus outros sites. Lista vazia = banner e seção "Outros projetos" não aparecem.
-  // Exemplo: { name: 'Meu site', url: 'https://exemplo.com', desc: 'Uma frase curta', emoji: '🧭' }
+  // Navegação entre os sites do autor: a barra <ltm-bar> (lista única em ltmleo.github.io/src/shared/sites.json).
+  // Não há banner próprio: o banner dos sites é a própria barra. Desligado aqui de propósito.
   banner: {
-    topStrip: true,     // faixa fina no topo (um site por dia, dispensável)
-    footerCards: true,  // seção "Outros projetos" no rodapé (todos os sites)
+    topStrip: false,
+    footerCards: false,
     sites: [],
   },
 

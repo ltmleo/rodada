@@ -11,7 +11,7 @@ css/app.css           estilos                       manifest.webmanifest, sw.js 
 js/parse.js           lógica pura dos textos de compartilhar (SEM DOM) — coberta por testes
 js/app.js             UI e estado                   js/analytics.js  Google Analytics   js/extras.js  banner, sugestões, instalação
 test/parse.test.js    testes com textos reais       scripts/build.sh monta _site/ e valida
-privacidade.html      política                      .claude/skills/produtizar-site/  IDs e sites do autor (GA, banner, formulário)
+privacidade.html      política
 ```
 
 ## Comandos
@@ -38,5 +38,6 @@ privacidade.html      política                      .claude/skills/produtizar-s
 - Pages precisa estar com **Source = GitHub Actions** (Settings › Pages).
 - O `sw.js` é versionado pelo commit no deploy; ao criar arquivos que o app pré-carrega, liste-os em `SHELL` do `sw.js` (o build falha se algum não existir).
 
-## Quando o dono pedir algo sobre analytics, banner ou sugestões
-Leia `.claude/skills/produtizar-site/SKILL.md`: ele guarda o ID do GA e a lista de sites do autor.
+## Integração ao ecossistema
+Seguir a skill `ltm-novo-site` (repo `ltmleo/ltmleo.github.io`, pasta `.claude/skills/ltm-novo-site/`). Ela define o GA compartilhado `G-714QFE3V9G`, a barra `<ltm-bar>` e a lista `sites.json`. O site `rodada` já está previsto lá (`id: rodada`, `path: /rodada/`).
+Sugestões: o formulário ainda não tem endpoint (`feedback.endpoint` em `config.js`); a skill não cobre isso.

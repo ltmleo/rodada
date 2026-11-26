@@ -8,12 +8,14 @@ const dnt = navigator.doNotTrack === '1' || window.doNotTrack === '1';   // resp
 export const analyticsOn = valid && !dnt;
 
 window.dataLayer = window.dataLayer || [];
+// Exposto em window: a <ltm-bar> compartilhada chama window.gtag('event', 'ltm_nav', …). Sem GA carregado, só entra no dataLayer.
 function gtag(){ window.dataLayer.push(arguments); }
+window.gtag = window.gtag || gtag;
 
 if (analyticsOn){
   gtag('consent', 'default', { ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'granted' });
   gtag('js', new Date());
-  gtag('config', id, { allow_google_signals:false, allow_ad_personalization_signals:false });
+  gtag('config', id, { content_group: CONFIG.siteId || 'rodada', allow_google_signals:false, allow_ad_personalization_signals:false });
   const s = document.createElement('script');
   s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
   document.head.append(s);
