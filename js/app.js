@@ -360,6 +360,8 @@ showTab($('tab-' + tab0) ? tab0 : 'hist');
 let shown = todayKey();
 setInterval(() => { if (todayKey() !== shown){ shown = todayKey(); $('dsel').value = shown; render(); } }, 30000);
 save(); render();
+// aviso único para quem veio do protótipo (painel-desafios)
+if (S.migratedFrom && !S.migrationNoticeSeen){ S.migrationNoticeSeen = true; save(); setTimeout(() => say('Esta página agora é a Rodada. Seu histórico veio junto.'), 700); }
 
 /* extras do produto: banner, sugestões, instalação (PWA), service worker */
 initExtras({ say, track });
