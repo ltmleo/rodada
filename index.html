@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rodada — sua rodada diária de jogos</title>
+  <meta name="description" content="Marque Termo, Wordle, Putt.day e outros desafios diários num só lugar, veja suas sequências e compartilhe o seu dia. Sem login.">
+  <link rel="canonical" href="https://ltmleo.github.io/rodada/">
+  <meta name="theme-color" content="#f5f2ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Rodada — sua rodada diária de jogos">
+  <meta property="og:description" content="Todos os desafios diários num só lugar: marque, cole o resultado, veja sequências e compartilhe. Sem login.">
+  <meta property="og:url" content="https://ltmleo.github.io/rodada/">
+  <meta property="og:image" content="https://ltmleo.github.io/rodada/icons/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Rodada">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="topbanner" id="topBanner" hidden></div>
+<main>
+  <header class="hero">
+    <div>
+      <div class="eyebrow" id="today"></div>
+      <h1>Rodada</h1>
+      <div class="kpis" id="badges"></div>
+      <button class="primary sm" id="shareBtn" style="margin-top:12px">↗ Compartilhar meu dia</button>
+    </div>
+    <div class="ring" id="ring" aria-hidden="true"></div>
+  </header>
+  <div class="warn" id="warn" hidden></div>
+
+  <section class="box paste">
+    <div class="paste-head"><h2>Registrar resultado</h2><span class="hint">Toque em "Compartilhar" no jogo e cole aqui (um ou vários de uma vez).</span></div>
+    <textarea id="paste" rows="3" placeholder="Cole aqui o resultado…" aria-label="Texto de compartilhar"></textarea>
+    <div class="detect" id="detect" aria-live="polite"></div>
+    <button type="button" class="linkbtn" id="suggestPaste" hidden>Não reconhecido? Sugerir este jogo</button>
+    <div class="paste-actions">
+      <button id="readclip" class="ghost sm">📋 Colar</button>
+      <details class="opts" id="opts"><summary>Jogo e dia</summary>
+        <div class="opts-in"><select id="gsel" aria-label="Jogo"></select><input type="date" id="dsel" aria-label="Dia"></div>
+      </details>
+      <span class="spacer"></span>
+      <button id="clear" class="ghost sm">Limpar</button>
+      <button id="save" class="primary">Registrar</button>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Hoje</h2>
+      <div class="actions"><span class="hint" id="todayHint"></span><button class="linkbtn" id="pickBtn" aria-expanded="false" aria-controls="picker">Escolher jogos</button></div></div>
+    <div class="box picker" id="picker" hidden>
+      <h2 id="pickTitle">Quais jogos você joga?</h2>
+      <div class="hint">Toque para ligar ou desligar. Os desligados somem do painel e não contam na sequência; o histórico deles fica guardado.</div>
+      <div class="chips" id="chips"></div>
+      <div class="row"><button class="primary sm" id="pickDone">Pronto</button><span class="spacer"></span>
+        <button class="linkbtn" id="pickAll">Todos</button><button class="linkbtn" id="pickEdit">Editar nomes e links</button></div>
+    </div>
+    <div class="list" id="cards"></div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Seções">
+    <button role="tab" data-tab="hist">Histórico</button>
+    <button role="tab" data-tab="stats">Estatísticas</button>
+    <button role="tab" data-tab="share">Compartilhar</button>
+    <button role="tab" data-tab="data">Dados</button>
+    <button role="tab" data-tab="about">Sobre</button>
+  </nav>
+
+  <section class="box tabpanel" id="tab-hist" role="tabpanel">
+    <div class="scroll"><table class="heat" id="hist"></table></div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>acertou</span><span><i style="background:var(--bad)"></i>errou</span>
+      <span><i style="background:var(--neu)"></i>feito</span><span><i style="border:1px dashed var(--faint)"></i>não jogou</span>
+      <span>Toque num quadrado para marcar/desmarcar.</span></div>
+  </section>
+
+  <section class="box tabpanel" id="tab-stats" role="tabpanel" hidden>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="box tabpanel stack" id="tab-share" role="tabpanel" hidden>
+    <pre id="summary"></pre>
+    <label class="row hint" style="gap:8px;cursor:pointer"><input type="checkbox" id="shareDetails" checked> Incluir o placar de cada jogo</label>
+    <div class="row"><button class="primary" id="copysum">↗ Compartilhar</button><button id="copyonly" class="ghost sm">Só copiar</button>
+      <span class="hint">Sem os quadradinhos dos jogos: não dá spoiler.</span></div>
+  </section>
+
+  <section class="box tabpanel stack" id="tab-data" role="tabpanel" hidden>
+    <div class="row">
+      <button id="manage">⚙️ Gerenciar jogos</button>
+      <button id="export">⬇️ Exportar</button>
+      <label class="btn">⬆️ Importar<input type="file" id="import" accept="application/json" hidden></label>
+    </div>
+    <p class="hint" style="margin:0">Tudo fica só neste navegador, sem login e sem servidor. Limpar os dados do navegador apaga o histórico: exporte de vez em quando. Para usar no celular, exporte aqui e importe lá.</p>
+  </section>
+
+  <section class="box tabpanel stack" id="tab-about" role="tabpanel" hidden>
+    <h2>Sobre a Rodada</h2>
+    <p class="hint" style="margin:0">Uma página só para os desafios diários que você joga: marque o que fez, cole os resultados, veja sequências e compartilhe o seu dia. Sem login e sem servidor: seus dados ficam neste aparelho.</p>
+    <div class="row"><button id="installBtn" class="primary sm" hidden>⬇ Instalar app</button>
+      <span class="hint" id="iosHint" hidden>No iPhone: toque em Compartilhar › "Adicionar à Tela de Início".</span></div>
+  </section>
+
+  <section class="sites" id="sites" hidden></section>
+
+  <footer class="foot">
+    <button class="linkbtn" id="fbBtn" hidden>💡 Sugerir jogo ou reportar erro</button>
+    <a href="privacidade.html">Privacidade</a>
+    <span>Rodada · feito por <a href="https://github.com/ltmleo" target="_blank" rel="noopener">ltmleo</a></span>
+  </footer>
+</main>
+
+<div class="toast" id="msg" role="status" aria-live="polite"></div>
+
+<dialog id="dlg">
+  <form method="dialog"><h2>Gerenciar jogos</h2>
+    <div class="hint" style="margin-top:4px">Edite emoji, nome e link, ou oculte. Remover não apaga o histórico.</div>
+    <div class="glist" id="glist"></div>
+    <div class="row"><button type="button" id="addgame" class="sm">+ Adicionar jogo</button><button type="button" id="resetgames" class="ghost sm">Restaurar lista inicial</button>
+      <span class="spacer"></span><button class="primary" value="close">Fechar</button></div>
+  </form>
+</dialog>
+<dialog id="fbDlg">
+  <form id="fbForm" method="dialog">
+    <h2>Sugestões e problemas</h2>
+    <div class="hint" style="margin:4px 0 10px">Sem login. Leio tudo, mas nem sempre consigo responder.</div>
+    <div class="glist">
+      <label class="hint" for="fbTipo">O que você quer enviar?</label>
+      <select id="fbTipo" name="tipo"><option value="jogo">Sugerir um jogo</option><option value="erro">Reportar um erro</option><option value="ideia">Ideia ou melhoria</option></select>
+      <div id="fbJogoBox" class="glist" style="margin:0">
+        <input type="text" name="jogo" placeholder="Nome do jogo" maxlength="80" aria-label="Nome do jogo">
+        <input type="url" name="link" placeholder="Link do jogo (https://…)" maxlength="300" aria-label="Link do jogo">
+        <label class="hint" for="fbExemplo">Cole um exemplo do texto de "Compartilhar" do jogo (ajuda muito!)</label>
+        <textarea id="fbExemplo" name="exemplo" rows="4" maxlength="1500"></textarea>
+      </div>
+      <label class="hint" for="fbMensagem">Mensagem</label>
+      <textarea id="fbMensagem" name="mensagem" rows="3" maxlength="2000" required></textarea>
+      <input type="text" name="contato" placeholder="Seu e-mail ou @ (opcional, só se quiser resposta)" maxlength="120" aria-label="Contato opcional">
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    </div>
+    <div class="hint" id="fbMsg" role="status"></div>
+    <div class="row" style="margin-top:10px;justify-content:flex-end"><button type="button" id="fbClose" class="ghost">Cancelar</button><button class="primary" id="fbSend" type="submit">Enviar</button></div>
+  </form>
+</dialog>
+
+<noscript><p style="padding:24px;font-family:system-ui">A Rodada precisa de JavaScript para funcionar.</p></noscript>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "rodada",
+  "private": true,
+  "type": "module",
+  "description": "Rodada: sua rodada diária de jogos, sem login.",
+  "scripts": { "test": "node --test test/parse.test.js", "serve": "python3 -m http.server -d . 8000" }
+}
